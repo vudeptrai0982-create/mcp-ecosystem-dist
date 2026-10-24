@@ -1,6 +1,3 @@
-﻿# ==============================================================================
-# BỘ CÀI ĐẶT TỰ ĐỘNG MCP HUB PRO 2026 - DÀNH CHO KHÁCH HÀNG
-# ==============================================================================
 $ErrorActionPreference = "SilentlyContinue"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
@@ -20,7 +17,7 @@ New-Item -ItemType Directory -Force -Path $DocsTarget | Out-Null
 
 $BaseUrl = "https://github.com/vudeptrai0982-create/mcp-ecosystem-dist/releases/download/v1.0"
 
-# 1. Tải môi trường Python nhúng ngầm
+# 1. Tải môi trường Python
 if (-not (Test-Path "$RuntimeTarget\python.exe")) {
     Write-Host "`n[1/3] Đang tải môi trường Python Embed siêu gọn..." -ForegroundColor Green
     $PyZipPath = "$InstallTarget\py_embed.zip"
@@ -31,14 +28,14 @@ if (-not (Test-Path "$RuntimeTarget\python.exe")) {
     Write-Host "`n[1/3] Môi trường Python đã có sẵn, bỏ qua bước tải." -ForegroundColor Gray
 }
 
-# 2. Tải toàn bộ phần mềm & công cụ AI
+# 2. Tải toàn bộ mã nguồn & giao diện
 Write-Host "`n[2/3] Đang cài đặt giao diện điều khiển & lõi AI..." -ForegroundColor Green
 $AppZipPath = "$InstallTarget\app.zip"
 Invoke-WebRequest -Uri "$BaseUrl/app_package.zip" -OutFile $AppZipPath
 Expand-Archive -Path $AppZipPath -DestinationPath $InstallTarget -Force
 Remove-Item $AppZipPath -Force
 
-# 3. Kích hoạt Add-in cho Revit (2021-2026)
+# 3. Kích hoạt Add-in cho Revit
 Write-Host "`n[3/3] Tự động đồng bộ plugin vào Revit..." -ForegroundColor Green
 $RevitYears = @("2021", "2022", "2023", "2024", "2025", "2026")
 foreach ($Year in $RevitYears) {
@@ -49,7 +46,7 @@ foreach ($Year in $RevitYears) {
     }
 }
 
-# 4. Tạo Icon ngoài Desktop cho khách
+# 4. Tạo Icon ngoài Desktop
 $WshShell = New-Object -ComObject WScript.Shell
 $Shortcut = $WshShell.CreateShortcut("$env:USERPROFILE\Desktop\MCP Hub Pro 2026.lnk")
 $Shortcut.TargetPath = "powershell.exe"
@@ -62,5 +59,4 @@ Write-Host "`n==========================================================" -Foreg
 Write-Host "  CÀI ĐẶT THÀNH CÔNG! BIỂU TƯỢNG ĐÃ XUẤT HIỆN TRÊN DESKTOP." -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Cyan
 
-# Mở luôn app cho khách
 Start-Process "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$InstallTarget\run_dashboard.ps1`""
